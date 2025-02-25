@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comma Separated Tool</title>
+
+    <!-- Bootstrap and Styles -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../styles.css" rel="stylesheet">
+
+    <!-- Xterm.js CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/xterm/4.19.0/xterm.min.css">
+
+    <!-- Load Sidebar -->
+    <script src="../load-nav.js"></script>
+
+    <style>
+        #terminal-container {
+            width: 100%;
+            height: 400px;
+            background-color: black;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="sidebar"></div>
+
+    <div class="content">
+        <h1>Comma Separated Tool</h1>
+
+        <h2>Terminal Output:</h2>
+        <div id="terminal-container"></div>
+    </div>
+
+    <!-- Socket.IO and Xterm.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.4/socket.io.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xterm/4.19.0/xterm.min.js"></script>
+
+    <script>
+        const socket = io("http://127.0.0.1:5000");  // Connect to Flask backend
+        const term = new Terminal();
+
+        term.open(document.getElementById("terminal-container"));
+        term.write("Running script: py/comma_separated.py...\r\n");
+
+        // Receive terminal output
+        socket.on("terminal_output", function(data) {
+            term.write(data.output);
+        });
+
+        // Allow user input in terminal
+        term.onData(data => {
+            socket.emit("terminal_input", { input: data });
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meeting Timer</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../styles.css" rel="stylesheet">
+    <script src="../load-nav.js"></script>
+</head>
+<body>
+    
+    <!--<div id="sidebar"></div>-->
+
+    <div class="container mt-4">
+        <div class="d-flex justify-content-end align-items-center">
+        <div>
+            <select id="saved-items" class="form-select d-inline w-auto" onchange="loadSavedItem()"></select>
+            <button class="btn btn-secondary" onclick="addNewItem()">Create</button>
+            <button id="save-btn" class="btn btn-success" onclick="saveItem()" disabled>Save</button>
+        </div>
+    </div>
+
+
+        <div class="d-flex justify-content-between align-items-center">
+            <h1 contenteditable="true" id="title" placeholder="Title">Meeting Timer</h1>
+        </div>
+
+        <div id="description-container">
+            <p id="description" contenteditable="true" placeholder="Description" onblur="formatDescription()">This is the page for the meeting timer</p>
+        </div>
+        
+        <div id="timer-setup">
+            <label for="minutes" class="form-label">Set Timer (minutes):</label>
+            <div class="input-group mb-3">
+                <input type="number" id="minutes" class="form-control" min="1" value="1">
+                <button class="btn btn-primary" onclick="startTimer()">Start Timer</button>
+            </div>
+        </div>
+        
+        <div id="timer-running" class="d-none">
+            <h2 id="timer-display">00:00</h2>
+            <button class="btn btn-danger" onclick="cancelTimer()">Cancel</button>
+        </div>
+
+        <div class="progress mt-3" style="height: 20px;">
+            <div id="progress-bar" class="progress-bar" role="progressbar" style="width: 0%;"></div>
+        </div>
+        
+        
+    </div>
+
+    <script>
+    let countdown;
+    let totalTime;
+    let remainingTime;
+
+    function startTimer() {
+        const minutesInput = document.getElementById("minutes");
+        totalTime = parseInt(minutesInput.value) * 60;
+        if (totalTime <= 0) return;
+
+        remainingTime = totalTime;
+        document.getElementById("timer-setup").classList.add("d-none");
+        document.getElementById("timer-running").classList.remove("d-none");
+        updateTimerDisplay();
+
+        countdown = setInterval(() => {
+            if (remainingTime <= 0) {
+                clearInterval(countdown);
+                return;
+            }
+            remainingTime--;
+            updateTimerDisplay();
+            updateProgressBar();
+        }, 1000);
+    }
+
+    function cancelTimer() {
+        clearInterval(countdown);
+        document.getElementById("timer-setup").classList.remove("d-none");
+        document.getElementById("timer-running").classList.add("d-none");
+        document.getElementById("progress-bar").style.width = "0%";
+    }
+
+    function updateTimerDisplay() {
+        const minutes = Math.floor(remainingTime / 60);
+        const seconds = remainingTime % 60;
+        document.getElementById("timer-display").textContent = 
+            `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    }
+
+    function updateProgressBar() {
+        const progress = ((totalTime - remainingTime) / totalTime) * 100;
+        document.getElementById("progress-bar").style.width = `${progress}%`;
+    }
+
+    function saveItem() {
+        const title = document.getElementById("title").textContent.trim();
+        const description = document.getElementById("description").innerHTML.trim(); // Keep <br> intact
+        const minutes = document.getElementById("minutes").value;
+
+        if (!title || !description || !minutes) return;
+
+        const savedItems = JSON.parse(localStorage.getItem("savedTimers")) || {};
+        savedItems[title] = { title, description, minutes };
+        localStorage.setItem("savedTimers", JSON.stringify(savedItems));
+
+        populateDropdown();
+    }
+
+    function loadSavedItem() {
+        const selectedTitle = document.getElementById("saved-items").value;
+        if (!selectedTitle) return;
+
+        const savedItems = JSON.parse(localStorage.getItem("savedTimers")) || {};
+        const item = savedItems[selectedTitle];
+        if (item) {
+            document.getElementById("title").textContent = item.title;
+            document.getElementById("description").innerHTML = item.description; // Preserve <br> for display
+            document.getElementById("minutes").value = item.minutes;
+            validateInputs();
+        }
+    }
+
+    function addNewItem() {
+        document.getElementById("title").textContent = "New Timer";
+        document.getElementById("description").innerHTML = "Enter description here...";
+        document.getElementById("minutes").value = "";
+        validateInputs();
+    }
+
+    function validateInputs() {
+        const title = document.getElementById("title").textContent.trim();
+        const description = document.getElementById("description").textContent.trim();
+        const minutes = document.getElementById("minutes").value;
+        document.getElementById("save-btn").disabled = !(title && description && minutes);
+    }
+
+    function formatDescription() {
+        const description = document.getElementById("description");
+        description.innerHTML = description.innerHTML.replace(/\n/g, '<br>'); // Ensure line breaks remain
+    }
+
+    document.getElementById("title").addEventListener("input", validateInputs);
+    document.getElementById("description").addEventListener("input", validateInputs);
+    document.getElementById("minutes").addEventListener("input", validateInputs);
+
+    function populateDropdown() {
+        const savedItems = JSON.parse(localStorage.getItem("savedTimers")) || {};
+        const dropdown = document.getElementById("saved-items");
+        dropdown.innerHTML = "<option value=''>Select Saved Timer</option>";
+        Object.keys(savedItems).forEach(title => {
+            const option = document.createElement("option");
+            option.value = title;
+            option.textContent = title;
+            dropdown.appendChild(option);
+        });
+    }
+
+    populateDropdown();
+</script>
+
+</body>
+</html>
