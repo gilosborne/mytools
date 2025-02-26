@@ -18,6 +18,7 @@
             <select id="saved-items" class="form-select d-inline w-auto" onchange="loadSavedItem()"></select>
             <button class="btn btn-secondary" onclick="addNewItem()">Create</button>
             <button id="save-btn" class="btn btn-success" onclick="saveItem()" disabled>Save</button>
+            <button id="delete-btn" class="btn btn-danger" onclick="deleteItem()" disabled>Delete</button>
         </div>
     </div>
 
@@ -135,6 +136,7 @@
         const description = document.getElementById("description").textContent.trim();
         const minutes = document.getElementById("minutes").value;
         document.getElementById("save-btn").disabled = !(title && description && minutes);
+        document.getElementById("delete-btn").disabled = !document.getElementById("saved-items").value;
     }
 
     function formatDescription() {
@@ -142,9 +144,22 @@
         description.innerHTML = description.innerHTML.replace(/\n/g, '<br>'); // Ensure line breaks remain
     }
 
+    function deleteItem() {
+        const selectedTitle = document.getElementById("saved-items").value;
+        if (!selectedTitle) return;
+
+        const savedItems = JSON.parse(localStorage.getItem("savedTimers")) || {};
+        delete savedItems[selectedTitle];
+        localStorage.setItem("savedTimers", JSON.stringify(savedItems));
+
+        populateDropdown();
+        addNewItem();
+    }
+
     document.getElementById("title").addEventListener("input", validateInputs);
     document.getElementById("description").addEventListener("input", validateInputs);
     document.getElementById("minutes").addEventListener("input", validateInputs);
+    document.getElementById("saved-items").addEventListener("change", validateInputs);
 
     function populateDropdown() {
         const savedItems = JSON.parse(localStorage.getItem("savedTimers")) || {};
