@@ -10,52 +10,51 @@
     <script defer src="/nav.js"></script>
 </head>
 
-<body class="bg-gray-100">
+<body class="bg-gray-100 flex justify-center p-6">
 
-    <div id="nav-container"></div>
-
-    <!-- Controls -->
-    <main class="flex flex-col items-center justify-center min-h-screen text-center p-6 space-y-6">
+    <main class="w-full max-w-lg mx-auto text-center space-y-6">
 
         <!-- Saved Items & Actions -->
-        <div class="flex gap-3">
-            <select id="saved-items" class="select select-bordered w-52" onchange="loadSavedItem()">
+        <div class="flex gap-3 justify-center">
+            <select id="saved-items" class="select select-bordered w-48" onchange="loadSavedItem()">
                 <option value="">Select Saved Timer</option>
             </select>
             <div class="btn-group">
-                <button class="btn btn-secondary" onclick="addNewItem()">Create</button>
-                <button id="save-btn" class="btn btn-accent" onclick="saveItem()" disabled>Save</button>
-                <button id="delete-btn" class="btn btn-error" onclick="deleteItem()" disabled>Delete</button>
+                <button class="btn btn-secondary w-auto px-4" onclick="addNewItem()">Create</button>
+                <button id="save-btn" class="btn btn-accent w-auto px-4" onclick="saveItem()" disabled>Save</button>
+                <button id="delete-btn" class="btn btn-error w-auto px-4 hidden" onclick="deleteItem()">Delete</button>
             </div>
         </div>
 
-        <!-- Title -->
-        <div class="card w-full max-w-md bg-white shadow p-4">
-            <h1 contenteditable="true" id="title" class="text-3xl font-bold bg-base-200 p-2 rounded">Meeting Timer</h1>
+        <!-- Title & Description -->
+        <div class="card max-w-md mx-auto bg-white shadow p-6">
+            <h1 contenteditable="true" id="title"
+                class="text-3xl font-bold bg-base-200 p-3 rounded text-center" oninput="enableSaveButton()">Meeting Timer</h1>
             <p id="description" contenteditable="true" class="border p-3 bg-base-100 mt-2 rounded shadow-sm"
-                onblur="formatDescription()">This is the page for the meeting timer</p>
+                oninput="enableSaveButton()">This is the page for the meeting timer</p>
         </div>
 
-        <!-- Timer Setup -->
-        <div id="timer-setup" class="card w-full max-w-md bg-white shadow p-4 space-y-3">
+        <!-- Timer Setup (Only Visible When Not Running) -->
+        <div id="timer-setup" class="card max-w-md mx-auto bg-white shadow p-6 space-y-4">
             <label for="minutes" class="label font-semibold">Set Timer (minutes):</label>
-            <div class="flex items-center gap-3">
-                <input type="number" id="minutes" class="input input-bordered w-24 text-center" min="1" value="1">
-                <button class="btn btn-primary flex-1" onclick="startTimer()">Start Timer</button>
+            <div class="flex items-center gap-3 justify-center">
+                <input type="number" id="minutes" class="input input-bordered w-20 text-center" min="1" value="1">
+                <button class="btn btn-primary w-auto px-4" onclick="startTimer()">Start Timer</button>
             </div>
         </div>
 
-        <!-- Running Timer -->
-        <div id="timer-running" class="hidden card w-full max-w-md bg-white shadow p-6 text-center">
+        <!-- Running Timer (Only Visible When Running) -->
+        <div id="timer-running" class="hidden card max-w-md mx-auto bg-white shadow p-6 text-center">
             <h1 id="timer-display" class="text-5xl font-bold text-primary">00:00</h1>
-            <button class="btn btn-error mt-4 w-full" onclick="cancelTimer()">Cancel</button>
+            <button class="btn btn-error mt-4 w-auto px-6" onclick="cancelTimer()">Cancel</button>
         </div>
 
         <!-- Progress Bar -->
-        <progress id="progress-bar" class="progress progress-primary w-full max-w-md h-4 mt-4" value="0" max="100"></progress>
+        <progress id="progress-bar" class="progress progress-primary max-w-md mx-auto h-4 mt-4 hidden" value="0"
+            max="100"></progress>
 
         <!-- Timer Completion Message -->
-        <div id="timer-complete" class="hidden alert alert-success shadow-lg max-w-md">
+        <div id="timer-complete" class="hidden alert alert-success shadow-lg max-w-md mx-auto">
             <span>Timer Complete! 🎉</span>
         </div>
 
@@ -63,6 +62,7 @@
 
     <script>
         let countdown, totalTime, remainingTime;
+        let savedTimers = {};
 
         function startTimer() {
             totalTime = parseInt(document.getElementById("minutes").value) * 60;
@@ -71,6 +71,7 @@
             remainingTime = totalTime;
             document.getElementById("timer-setup").classList.add("hidden");
             document.getElementById("timer-running").classList.remove("hidden");
+            document.getElementById("progress-bar").classList.remove("hidden");
             document.getElementById("timer-complete").classList.add("hidden");
             updateTimerDisplay();
 
@@ -78,6 +79,7 @@
                 if (remainingTime <= 0) {
                     clearInterval(countdown);
                     document.getElementById("timer-running").classList.add("hidden");
+                    document.getElementById("progress-bar").classList.add("hidden");
                     document.getElementById("timer-complete").classList.remove("hidden");
                     return;
                 }
@@ -91,7 +93,7 @@
             clearInterval(countdown);
             document.getElementById("timer-setup").classList.remove("hidden");
             document.getElementById("timer-running").classList.add("hidden");
-            document.getElementById("progress-bar").value = 0;
+            document.getElementById("progress-bar").classList.add("hidden");
             document.getElementById("timer-complete").classList.add("hidden");
         }
 
@@ -100,6 +102,61 @@
             const seconds = remainingTime % 60;
             document.getElementById("timer-display").textContent =
                 `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }
+
+        function enableSaveButton() {
+            document.getElementById("save-btn").disabled = false;
+        }
+
+        function addNewItem() {
+            let newTitle = prompt("Enter a name for the new timer:");
+            if (!newTitle) return;
+
+            let option = document.createElement("option");
+            option.value = newTitle;
+            option.textContent = newTitle;
+            document.getElementById("saved-items").appendChild(option);
+
+            savedTimers[newTitle] = { title: newTitle, description: "" };
+            document.getElementById("saved-items").value = newTitle;
+            toggleDeleteButton();
+        }
+
+        function saveItem() {
+            let selected = document.getElementById("saved-items").value;
+            if (!selected) return;
+
+            savedTimers[selected] = {
+                title: document.getElementById("title").textContent,
+                description: document.getElementById("description").textContent
+            };
+            document.getElementById("save-btn").disabled = true;
+        }
+
+        function loadSavedItem() {
+            let selected = document.getElementById("saved-items").value;
+            if (!selected || !savedTimers[selected]) return;
+
+            document.getElementById("title").textContent = savedTimers[selected].title;
+            document.getElementById("description").textContent = savedTimers[selected].description;
+            toggleDeleteButton();
+        }
+
+        function deleteItem() {
+            let selected = document.getElementById("saved-items").value;
+            if (!selected) return;
+
+            delete savedTimers[selected];
+            let selectBox = document.getElementById("saved-items");
+            selectBox.remove(selectBox.selectedIndex);
+            document.getElementById("title").textContent = "Meeting Timer";
+            document.getElementById("description").textContent = "This is the page for the meeting timer";
+            toggleDeleteButton();
+        }
+
+        function toggleDeleteButton() {
+            let selectedValue = document.getElementById("saved-items").value;
+            document.getElementById("delete-btn").classList.toggle("hidden", !selectedValue);
         }
     </script>
 
