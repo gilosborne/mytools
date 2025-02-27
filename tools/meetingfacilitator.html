@@ -6,10 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meeting Facilitator</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {},
+            },
+            plugins: [daisyui],
+        }
+    </script>
     <script defer src="/nav.js"></script> <!-- Use absolute path -->
 </head>
 
-<body class="bg-gray-100"> <!-- Ensure theme is applied -->
+<body class="bg-gray-100">
 
     <div id="nav-container"></div>
 
