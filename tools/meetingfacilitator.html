@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,82 +8,85 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="/nav.js"></script> <!-- Use absolute path -->
 </head>
-<body class="p-6" data-theme="light"> <!-- Ensure theme is applied -->
+
+<body class="bg-gray-100" data-theme="cyberpunk"> <!-- Ensure theme is applied -->
 
     <div id="nav-container"></div>
 
     <!-- Controls -->
-    <div class="flex justify-end gap-2 mt-6">
-        <select id="saved-items" class="select select-bordered w-48" onchange="loadSavedItem()">
-            <option value="">Select Saved Timer</option>
-        </select>
-        <button class="btn btn-secondary" onclick="addNewItem()">Create</button>
-        <button id="save-btn" class="btn btn-success" onclick="saveItem()" disabled>Save</button>
-        <button id="delete-btn" class="btn btn-error" onclick="deleteItem()" disabled>Delete</button>
-    </div>
-
-    <!-- Title -->
-    <h1 contenteditable="true" id="title" class="text-3xl font-bold mt-4">Meeting Timer</h1>
-
-    <!-- Description -->
-    <p id="description" contenteditable="true" class="border p-2 bg-base-100 mt-2" 
-       onblur="formatDescription()">This is the page for the meeting timer</p>
-
-    <!-- Timer Setup -->
-    <div id="timer-setup" class="mt-4">
-        <label for="minutes" class="label">Set Timer (minutes):</label>
-        <div class="flex gap-2">
-            <input type="number" id="minutes" class="input input-bordered w-20" min="1" value="1">
-            <button class="btn btn-primary" onclick="startTimer()">Start Timer</button>
+    <main class="flex flex-col items-center justify-center min-h-screen text-center p-4">
+        <div class="flex justify-end gap-2 mt-6">
+            <select id="saved-items" class="select select-bordered w-48" onchange="loadSavedItem()">
+                <option value="">Select Saved Timer</option>
+            </select>
+            <button class="btn btn-secondary" onclick="addNewItem()">Create</button>
+            <button id="save-btn" class="btn btn-success" onclick="saveItem()" disabled>Save</button>
+            <button id="delete-btn" class="btn btn-error" onclick="deleteItem()" disabled>Delete</button>
         </div>
-    </div>
 
-    <!-- Running Timer -->
-    <div id="timer-running" class="hidden mt-6">
-        <h1 id="timer-display" class="text-4xl font-bold">00:00</h1>
-        <button class="btn btn-error mt-4" onclick="cancelTimer()">Cancel</button>
-    </div>
+        <!-- Title -->
+        <h1 contenteditable="true" id="title" class="text-3xl font-bold mt-4">Meeting Timer</h1>
 
-    <!-- Progress Bar -->
-    <progress id="progress-bar" class="progress progress-primary w-full mt-6" value="0" max="100"></progress>
+        <!-- Description -->
+        <p id="description" contenteditable="true" class="border p-2 bg-base-100 mt-2" onblur="formatDescription()">This
+            is the page for the meeting timer</p>
 
+        <!-- Timer Setup -->
+        <div id="timer-setup" class="mt-4">
+            <label for="minutes" class="label">Set Timer (minutes):</label>
+            <div class="flex gap-2">
+                <input type="number" id="minutes" class="input input-bordered w-20" min="1" value="1">
+                <button class="btn btn-primary" onclick="startTimer()">Start Timer</button>
+            </div>
+        </div>
+
+        <!-- Running Timer -->
+        <div id="timer-running" class="hidden mt-6">
+            <h1 id="timer-display" class="text-4xl font-bold">00:00</h1>
+            <button class="btn btn-error mt-4" onclick="cancelTimer()">Cancel</button>
+        </div>
+
+        <!-- Progress Bar -->
+        <progress id="progress-bar" class="progress progress-primary w-full mt-6" value="0" max="100"></progress>
+    </main>
     <script>
-    let countdown, totalTime, remainingTime;
+        let countdown, totalTime, remainingTime;
 
-    function startTimer() {
-        totalTime = parseInt(document.getElementById("minutes").value) * 60;
-        if (totalTime <= 0) return;
+        function startTimer() {
+            totalTime = parseInt(document.getElementById("minutes").value) * 60;
+            if (totalTime <= 0) return;
 
-        remainingTime = totalTime;
-        document.getElementById("timer-setup").classList.add("hidden");
-        document.getElementById("timer-running").classList.remove("hidden");
-        updateTimerDisplay();
-
-        countdown = setInterval(() => {
-            if (remainingTime <= 0) {
-                clearInterval(countdown);
-                return;
-            }
-            remainingTime--;
+            remainingTime = totalTime;
+            document.getElementById("timer-setup").classList.add("hidden");
+            document.getElementById("timer-running").classList.remove("hidden");
             updateTimerDisplay();
-            document.getElementById("progress-bar").value = ((totalTime - remainingTime) / totalTime) * 100;
-        }, 1000);
-    }
 
-    function cancelTimer() {
-        clearInterval(countdown);
-        document.getElementById("timer-setup").classList.remove("hidden");
-        document.getElementById("timer-running").classList.add("hidden");
-        document.getElementById("progress-bar").value = 0;
-    }
+            countdown = setInterval(() => {
+                if (remainingTime <= 0) {
+                    clearInterval(countdown);
+                    return;
+                }
+                remainingTime--;
+                updateTimerDisplay();
+                document.getElementById("progress-bar").value = ((totalTime - remainingTime) / totalTime) * 100;
+            }, 1000);
+        }
 
-    function updateTimerDisplay() {
-        const minutes = Math.floor(remainingTime / 60);
-        const seconds = remainingTime % 60;
-        document.getElementById("timer-display").textContent = 
-            `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-    }
+        function cancelTimer() {
+            clearInterval(countdown);
+            document.getElementById("timer-setup").classList.remove("hidden");
+            document.getElementById("timer-running").classList.add("hidden");
+            document.getElementById("progress-bar").value = 0;
+        }
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(remainingTime / 60);
+            const seconds = remainingTime % 60;
+            document.getElementById("timer-display").textContent =
+                `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }
     </script>
 
 </body>
+
 </html>
