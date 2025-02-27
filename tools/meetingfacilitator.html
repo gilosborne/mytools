@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meeting Facilitator</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script defer src="../nav.js"></script>
+    <script defer src="/nav.js"></script> <!-- Use absolute path -->
 </head>
-<body class="p-6">
+<body class="p-6" data-theme="light"> <!-- Ensure theme is applied -->
 
     <div id="nav-container"></div>
 
@@ -82,85 +82,6 @@
         document.getElementById("timer-display").textContent = 
             `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
     }
-
-    function saveItem() {
-        const title = document.getElementById("title").textContent.trim();
-        const description = document.getElementById("description").innerHTML.trim();
-        const minutes = document.getElementById("minutes").value;
-
-        if (!title || !description || !minutes) return;
-
-        const savedItems = JSON.parse(localStorage.getItem("savedTimers")) || {};
-        savedItems[title] = { title, description, minutes };
-        localStorage.setItem("savedTimers", JSON.stringify(savedItems));
-
-        populateDropdown();
-    }
-
-    function loadSavedItem() {
-        const selectedTitle = document.getElementById("saved-items").value;
-        if (!selectedTitle) return;
-
-        const savedItems = JSON.parse(localStorage.getItem("savedTimers")) || {};
-        const item = savedItems[selectedTitle];
-        if (item) {
-            document.getElementById("title").textContent = item.title;
-            document.getElementById("description").innerHTML = item.description;
-            document.getElementById("minutes").value = item.minutes;
-            validateInputs();
-        }
-    }
-
-    function addNewItem() {
-        document.getElementById("title").textContent = "New Timer";
-        document.getElementById("description").innerHTML = "Enter description here...";
-        document.getElementById("minutes").value = "";
-        validateInputs();
-    }
-
-    function validateInputs() {
-        const title = document.getElementById("title").textContent.trim();
-        const description = document.getElementById("description").textContent.trim();
-        const minutes = document.getElementById("minutes").value;
-        document.getElementById("save-btn").disabled = !(title && description && minutes);
-        document.getElementById("delete-btn").disabled = !document.getElementById("saved-items").value;
-    }
-
-    function formatDescription() {
-        const description = document.getElementById("description");
-        description.innerHTML = description.innerHTML.replace(/\n/g, '<br>');
-    }
-
-    function deleteItem() {
-        const selectedTitle = document.getElementById("saved-items").value;
-        if (!selectedTitle) return;
-
-        const savedItems = JSON.parse(localStorage.getItem("savedTimers")) || {};
-        delete savedItems[selectedTitle];
-        localStorage.setItem("savedTimers", JSON.stringify(savedItems));
-
-        populateDropdown();
-        addNewItem();
-    }
-
-    document.getElementById("title").addEventListener("input", validateInputs);
-    document.getElementById("description").addEventListener("input", validateInputs);
-    document.getElementById("minutes").addEventListener("input", validateInputs);
-    document.getElementById("saved-items").addEventListener("change", validateInputs);
-
-    function populateDropdown() {
-        const savedItems = JSON.parse(localStorage.getItem("savedTimers")) || {};
-        const dropdown = document.getElementById("saved-items");
-        dropdown.innerHTML = "<option value=''>Select Saved Timer</option>";
-        Object.keys(savedItems).forEach(title => {
-            const option = document.createElement("option");
-            option.value = title;
-            option.textContent = title;
-            dropdown.appendChild(option);
-        });
-    }
-
-    populateDropdown();
     </script>
 
 </body>

@@ -1,10 +1,8 @@
 document.addEventListener("DOMContentLoaded", function () {
-    // Determine the correct relative path to `nav.html`
-    let navPath = window.location.pathname.includes("/tools/") ? "../nav.html" : "nav.html";
-
-    fetch(navPath)
+    fetch("/nav.html")  // Absolute path works in GitHub Pages
         .then(response => response.text())
         .then(data => {
             document.getElementById("nav-container").innerHTML = data;
-        });
+        })
+        .catch(error => console.error("Navigation failed to load:", error));
 });
