@@ -16,10 +16,11 @@
 
         <!-- Saved Items & Actions -->
         <div class="flex gap-3 justify-center">
-            <select id="saved-items" class="select select-bordered w-48" onchange="loadSavedItem()">
-                <option value="">Select Saved Timer</option>
-            </select>
+            
             <div class="btn-group">
+                <select id="saved-items" class="select select-bordered w-48" onchange="loadSavedItem()">
+                    <option value="">Select Saved Timer</option>
+                </select>
                 <button class="btn btn-secondary w-auto px-4" onclick="addNewItem()">Create</button>
                 <button id="save-btn" class="btn btn-accent w-auto px-4" onclick="saveItem()" disabled>Save</button>
                 <button id="delete-btn" class="btn btn-error w-auto px-4 hidden" onclick="deleteItem()">Delete</button>
