@@ -65,102 +65,91 @@
     <script>
         let countdown, totalTime, remainingTime;
         let savedTimers = {};
-
+    
+        // Load saved timers from localStorage when the page loads
+        document.addEventListener("DOMContentLoaded", () => {
+            const storedTimers = localStorage.getItem("savedTimers");
+            if (storedTimers) {
+                savedTimers = JSON.parse(storedTimers);
+                updateDropdown();
+            }
+        });
+    
         function saveItem() {
             let title = document.getElementById("title").textContent.trim();
             if (!title) return;
-
-            let description = document.getElementById("description").innerHTML.replace(/<br>/g, "\n"); // Convert <br> to \n for storage
+    
+            let description = document.getElementById("description").innerHTML.replace(/<br>/g, "\n"); // Preserve new lines
             let minutes = document.getElementById("minutes").value;
-
-            // If title isn't already in the dropdown, add it
-            let selectBox = document.getElementById("saved-items");
+    
+            // If new, add to dropdown
             if (!savedTimers[title]) {
+                let selectBox = document.getElementById("saved-items");
                 let option = document.createElement("option");
                 option.value = title;
                 option.textContent = title;
                 selectBox.appendChild(option);
             }
-
+    
             // Save data
             savedTimers[title] = { title, description, minutes };
-            selectBox.value = title; // Select the saved item
+            localStorage.setItem("savedTimers", JSON.stringify(savedTimers)); // Store in localStorage
+    
+            document.getElementById("saved-items").value = title; // Auto-select saved item
             toggleDeleteButton();
             document.getElementById("save-btn").disabled = true;
         }
-
+    
         function loadSavedItem() {
             let selected = document.getElementById("saved-items").value;
             if (!selected || !savedTimers[selected]) return;
-
+    
             document.getElementById("title").textContent = savedTimers[selected].title;
-            document.getElementById("description").innerHTML = savedTimers[selected].description.replace(/\n/g, "<br>"); // Convert \n to <br> for display
+            document.getElementById("description").innerHTML = savedTimers[selected].description.replace(/\n/g, "<br>"); // Restore new lines
             document.getElementById("minutes").value = savedTimers[selected].minutes;
             toggleDeleteButton();
         }
-
+    
         function deleteItem() {
             let selected = document.getElementById("saved-items").value;
             if (!selected) return;
-
+    
             delete savedTimers[selected];
+            localStorage.setItem("savedTimers", JSON.stringify(savedTimers)); // Update localStorage
+    
             let selectBox = document.getElementById("saved-items");
             selectBox.remove(selectBox.selectedIndex);
+    
+            // Reset to default values
             document.getElementById("title").textContent = "Meeting Timer";
             document.getElementById("description").textContent = "This is the page for the meeting timer";
-            document.getElementById("minutes").value = 1; // Reset to default timer value
+            document.getElementById("minutes").value = 1;
+    
             toggleDeleteButton();
         }
-
-        function startTimer() {
-            totalTime = parseInt(document.getElementById("minutes").value) * 60;
-            if (totalTime <= 0) return;
-
-            remainingTime = totalTime;
-            document.getElementById("timer-setup").classList.add("hidden");
-            document.getElementById("timer-running").classList.remove("hidden");
-            document.getElementById("progress-bar").classList.remove("hidden");
-            document.getElementById("timer-complete").classList.add("hidden");
-            updateTimerDisplay();
-
-            countdown = setInterval(() => {
-                if (remainingTime <= 0) {
-                    clearInterval(countdown);
-                    document.getElementById("timer-running").classList.add("hidden");
-                    document.getElementById("progress-bar").classList.add("hidden");
-                    document.getElementById("timer-complete").classList.remove("hidden");
-                    return;
-                }
-                remainingTime--;
-                updateTimerDisplay();
-                document.getElementById("progress-bar").value = ((totalTime - remainingTime) / totalTime) * 100;
-            }, 1000);
-        }
-
-        function cancelTimer() {
-            clearInterval(countdown);
-            document.getElementById("timer-setup").classList.remove("hidden");
-            document.getElementById("timer-running").classList.add("hidden");
-            document.getElementById("progress-bar").classList.add("hidden");
-            document.getElementById("timer-complete").classList.add("hidden");
-        }
-
-        function updateTimerDisplay() {
-            const minutes = Math.floor(remainingTime / 60);
-            const seconds = remainingTime % 60;
-            document.getElementById("timer-display").textContent =
-                `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-        }
-
+    
         function enableSaveButton() {
             document.getElementById("save-btn").disabled = false;
         }
-
+    
         function toggleDeleteButton() {
             let selectedValue = document.getElementById("saved-items").value;
             document.getElementById("delete-btn").classList.toggle("hidden", !selectedValue);
         }
+    
+        function updateDropdown() {
+            let selectBox = document.getElementById("saved-items");
+            selectBox.innerHTML = '<option value="">Select Saved Timer</option>'; // Reset dropdown
+    
+            Object.keys(savedTimers).forEach(title => {
+                let option = document.createElement("option");
+                option.value = title;
+                option.textContent = title;
+                selectBox.appendChild(option);
+            });
+        }
     </script>
+    
 
 </body>
 
