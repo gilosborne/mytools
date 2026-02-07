@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artist Reference - Press Release</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', system-ui, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            background: #fff;
+            color: #1d1d1f;
+            line-height: 1.47059;
+        }
+
+        .header {
+            position: sticky;
+            top: 0;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: saturate(180%) blur(20px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            padding: 0 max(22px, env(safe-area-inset-right));
+        }
+
+        .header-content {
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 14px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-size: 21px;
+            font-weight: 600;
+            letter-spacing: -0.03em;
+        }
+
+        .label {
+            font-size: 12px;
+            color: #86868b;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            font-weight: 600;
+        }
+
+        .hero {
+            padding: 60px 22px 80px;
+            text-align: center;
+            animation: fadeIn 1s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero-date {
+            font-size: 14px;
+            color: #86868b;
+            margin-bottom: 20px;
+        }
+
+        .hero-headline {
+            font-size: 56px;
+            font-weight: 700;
+            letter-spacing: -0.015em;
+            line-height: 1.07143;
+            max-width: 820px;
+            margin: 0 auto 24px;
+        }
+
+        .hero-subhead {
+            font-size: 28px;
+            font-weight: 400;
+            line-height: 1.14286;
+            letter-spacing: 0.004em;
+            color: #86868b;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .content {
+            max-width: 692px;
+            margin: 0 auto;
+            padding: 0 22px 100px;
+        }
+
+        .body-text {
+            font-size: 21px;
+            line-height: 1.381;
+            letter-spacing: 0.011em;
+            margin-bottom: 1.2em;
+        }
+
+        .body-text:first-of-type::first-letter {
+            font-size: 84px;
+            line-height: 1;
+            float: left;
+            margin: 5px 10px 0 0;
+            font-weight: 600;
+        }
+
+        .quote-block {
+            margin: 60px 0;
+            padding: 40px;
+            background: #f5f5f7;
+            border-radius: 18px;
+            animation: slideUp 0.8s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .quote-text {
+            font-size: 24px;
+            font-weight: 600;
+            line-height: 1.33341;
+            letter-spacing: 0.009em;
+            margin-bottom: 16px;
+        }
+
+        .quote-attribution {
+            font-size: 17px;
+            color: #6e6e73;
+            line-height: 1.47059;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            margin: 80px 0;
+        }
+
+        .feature-card {
+            animation: fadeIn 1s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .feature-card:nth-child(1) { animation-delay: 0.1s; }
+        .feature-card:nth-child(2) { animation-delay: 0.2s; }
+        .feature-card:nth-child(3) { animation-delay: 0.3s; }
+        .feature-card:nth-child(4) { animation-delay: 0.4s; }
+
+        .feature-title {
+            font-size: 28px;
+            font-weight: 600;
+            line-height: 1.14286;
+            letter-spacing: 0.007em;
+            margin-bottom: 12px;
+        }
+
+        .feature-description {
+            font-size: 17px;
+            line-height: 1.47059;
+            letter-spacing: -0.022em;
+            color: #6e6e73;
+        }
+
+        .media-section {
+            background: #fbfbfd;
+            padding: 80px 22px;
+            margin: 80px -22px 0;
+        }
+
+        .media-content {
+            max-width: 980px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 48px;
+            font-weight: 700;
+            line-height: 1.08349;
+            letter-spacing: -0.003em;
+            margin-bottom: 40px;
+        }
+
+        .download-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .download-card {
+            background: white;
+            border-radius: 18px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .download-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+        }
+
+        .download-title {
+            font-size: 21px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .download-description {
+            font-size: 14px;
+            color: #86868b;
+            margin-bottom: 20px;
+        }
+
+        .download-button {
+            display: inline-block;
+            background: #0071e3;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 980px;
+            font-size: 14px;
+            text-decoration: none;
+            transition: background 0.3s ease;
+        }
+
+        .download-button:hover {
+            background: #0077ed;
+        }
+
+        .contact-section {
+            padding-top: 60px;
+            border-top: 1px solid #d2d2d7;
+        }
+
+        .contact-title {
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 30px;
+        }
+
+        .contact-item {
+            font-size: 17px;
+            margin-bottom: 16px;
+        }
+
+        .contact-label {
+            color: #86868b;
+            display: inline-block;
+            min-width: 120px;
+        }
+
+        .link {
+            color: #0071e3;
+            text-decoration: none;
+        }
+
+        .link:hover {
+            text-decoration: underline;
+        }
+
+        .boilerplate {
+            margin-top: 60px;
+            padding-top: 40px;
+            border-top: 1px solid #d2d2d7;
+            font-size: 14px;
+            line-height: 1.57143;
+            color: #6e6e73;
+        }
+
+        @media (max-width: 734px) {
+            .hero-headline {
+                font-size: 40px;
+            }
+            .hero-subhead {
+                font-size: 21px;
+            }
+            .body-text {
+                font-size: 17px;
+            }
+            .quote-text {
+                font-size: 21px;
+            }
+            .section-title {
+                font-size: 32px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">Artist Reference</div>
+            <div class="label">Press Release</div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <p class="hero-date">February 6, 2026</p>
+        <h1 class="hero-headline">Artist Reference brings professional studio tools to traditional artists everywhere</h1>
+        <p class="hero-subhead">The new iPad and iPhone app delivers value studies, gridlines, and curated references designed for painters and illustrators working at the easel.</p>
+    </section>
+
+    <article class="content">
+        <p class="body-text">Artist Reference makes it easier than ever for traditional artists to see their subject clearly and translate what they see onto canvas. Built specifically for painters, illustrators, and artists working with physical mediums, the app combines essential reference tools with a beautifully simple interface that stays out of the way of the creative process.</p>
+
+        <p class="body-text">Every feature in Artist Reference is designed to solve real problems artists face at the easel. Value studies simplify any reference into clear tonal structures, letting artists see light and shadow before mixing a single color. Customizable gridlines ensure accurate proportions and perspective from the first brushstroke. And a carefully curated library of ready-to-paint references across landscapes, still lifes, portraits, and more means inspiration is always just a tap away.</p>
+
+        <div class="quote-block">
+            <p class="quote-text">"Traditional artists deserve tools as thoughtfully designed as their work. Artist Reference was built to help painters focus on what matters: translating what they see onto the canvas with confidence."</p>
+            <p class="quote-attribution">Independent Developer, Artist Reference</p>
+        </div>
+
+        <p class="body-text">Unlike cluttered reference apps designed for digital artists, Artist Reference embraces simplicity. There are no ads, no accounts to create, and no distractions. The app works entirely offline, making it perfect for plein air painting, studio sessions, or workshops anywhere. All references live in one organized space, ready the moment inspiration strikes.</p>
+
+        <p class="body-text">The app's Collections feature provides curated reference images across categories including Animals, Architecture, Botanical, Master Studies, and more. Each collection is ready to paint, eliminating the time spent searching for the perfect subject and letting artists dive straight into their work.</p>
+
+        <div class="feature-grid">
+            <div class="feature-card">
+                <h3 class="feature-title">Value Studies</h3>
+                <p class="feature-description">Simplify any reference from 2 to 10 value steps or full grayscale to see the tonal structure of your subject.</p>
+            </div>
+            <div class="feature-card">
+                <h3 class="feature-title">Gridlines</h3>
+                <p class="feature-description">Overlay a customizable grid on any reference to nail proportions and perspective.</p>
+            </div>
+            <div class="feature-card">
+                <h3 class="feature-title">Curated Collections</h3>
+                <p class="feature-description">Ready-to-paint references across landscapes, still lifes, portraits, and more.</p>
+            </div>
+            <div class="feature-card">
+                <h3 class="feature-title">Works Offline</h3>
+                <p class="feature-description">Your references go wherever you create. No internet required.</p>
+            </div>
+        </div>
+
+        <p class="body-text">Artist Reference is designed for iPhone and iPad, with full support for multitasking and Stage Manager on iPad. Artists can view their references side-by-side with other apps, making it seamless to reference and create simultaneously.</p>
+
+        <p class="body-text">Artist Reference is available now on the App Store.</p>
+    </article>
+
+    <section class="media-section">
+        <div class="media-content">
+            <h2 class="section-title">Media Resources</h2>
+            
+            <div class="download-grid">
+                <div class="download-card">
+                    <h3 class="download-title">App Icon</h3>
+                    <p class="download-description">High-resolution PNG, 1024x1024px</p>
+                    <a href="#" class="download-button">Download</a>
+                </div>
+                
+                <div class="download-card">
+                    <h3 class="download-title">Screenshots</h3>
+                    <p class="download-description">iPhone & iPad, Multiple orientations</p>
+                    <a href="#" class="download-button">Download</a>
+                </div>
+                
+                <div class="download-card">
+                    <h3 class="download-title">Feature Images</h3>
+                    <p class="download-description">Value studies, Gridlines, Collections</p>
+                    <a href="#" class="download-button">Download</a>
+                </div>
+                
+                <div class="download-card">
+                    <h3 class="download-title">Demo Video</h3>
+                    <p class="download-description">MP4, 1080p, 30s overview</p>
+                    <a href="#" class="download-button">Download</a>
+                </div>
+                
+                <div class="download-card">
+                    <h3 class="download-title">Animated GIFs</h3>
+                    <p class="download-description">Feature demonstrations, optimized for web</p>
+                    <a href="#" class="download-button">Download</a>
+                </div>
+                
+                <div class="download-card">
+                    <h3 class="download-title">Press Kit (ZIP)</h3>
+                    <p class="download-description">Complete package with all assets</p>
+                    <a href="#" class="download-button">Download</a>
+                </div>
+            </div>
+
+            <div class="contact-section">
+                <h2 class="contact-title">Press Contact</h2>
+                <div class="contact-item">
+                    <span class="contact-label">Email:</span>
+                    <a href="mailto:press@artistsreference.app" class="link">press@artistsreference.app</a>
+                </div>
+                <div class="contact-item">
+                    <span class="contact-label">Website:</span>
+                    <a href="https://artistsreference.app" class="link" target="_blank">artistsreference.app</a>
+                </div>
+                <div class="contact-item">
+                    <span class="contact-label">App Store:</span>
+                    <a href="https://apps.apple.com/app/apple-store/id6752580673" class="link" target="_blank">Download Artist Reference</a>
+                </div>
+                <div class="contact-item">
+                    <span class="contact-label">Review Copy:</span>
+                    <span>Available upon request via TestFlight</span>
+                </div>
+            </div>
+
+            <div class="boilerplate">
+                <strong>About Artist Reference</strong><br>
+                Artist Reference is an iPad and iPhone app designed exclusively for traditional artists working with physical mediums like oils, watercolors, charcoal, and pencil. The app provides essential studio tools including value studies, customizable gridlines, and curated reference collections, all in a clean, distraction-free interface that works entirely offline. Artist Reference is developed by an independent developer passionate about supporting the traditional art community.
+            </div>
+        </div>
+    </section>
+</body>
+</html>
