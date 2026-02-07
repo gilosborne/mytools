@@ -265,6 +265,40 @@
             text-decoration: underline;
         }
 
+        .screenshot-gallery {
+            padding: 60px 0 80px;
+            overflow: hidden;
+        }
+
+        .gallery-scroll {
+            display: flex;
+            gap: 20px;
+            overflow-x: auto;
+            overflow-y: hidden;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            padding: 0 max(22px, calc((100vw - 1400px) / 2));
+            scrollbar-width: none;
+        }
+
+        .gallery-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        .screenshot {
+            flex: 0 0 auto;
+            height: 600px;
+            width: auto;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+            scroll-snap-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .screenshot:hover {
+            transform: scale(1.02);
+        }
+
         .boilerplate {
             margin-top: 60px;
             padding-top: 40px;
@@ -290,6 +324,9 @@
             .section-title {
                 font-size: 32px;
             }
+            .screenshot {
+                height: 500px;
+            }
         }
     </style>
 </head>
@@ -307,6 +344,17 @@
         <p class="hero-subhead">The new iPad and iPhone app delivers value studies, gridlines, and curated references designed for painters and illustrators working at the easel.</p>
     </section>
 
+    <section class="screenshot-gallery">
+        <div class="gallery-scroll">
+            <img src="https://raw.githubusercontent.com/gilosborne/mytools/main/press/ArtistReference/iPhone16Pro01.png" alt="Artist Reference on iPhone" class="screenshot">
+            <img src="https://raw.githubusercontent.com/gilosborne/mytools/main/press/ArtistReference/iPhone16Pro02.png" alt="Value Studies" class="screenshot">
+            <img src="https://raw.githubusercontent.com/gilosborne/mytools/main/press/ArtistReference/iPhone16Pro03.png" alt="Gridlines" class="screenshot">
+            <img src="https://raw.githubusercontent.com/gilosborne/mytools/main/press/ArtistReference/iPhone16Pro04.png" alt="Collections" class="screenshot">
+            <img src="https://raw.githubusercontent.com/gilosborne/mytools/main/press/ArtistReference/iPhone16Pro05.png" alt="Reference Library" class="screenshot">
+            <img src="https://raw.githubusercontent.com/gilosborne/mytools/main/press/ArtistReference/iPhone16Pro06.png" alt="Side by Side View" class="screenshot">
+        </div>
+    </section>
+
     <article class="content">
         <p class="body-text">Artist Reference makes it easier than ever for traditional artists to see their subject clearly and translate what they see onto canvas. Built specifically for painters, illustrators, and artists working with physical mediums, the app combines essential reference tools with a beautifully simple interface that stays out of the way of the creative process.</p>
 
@@ -314,7 +362,7 @@
 
         <div class="quote-block">
             <p class="quote-text">"Traditional artists deserve tools as thoughtfully designed as their work. Artist Reference was built to help painters focus on what matters: translating what they see onto the canvas with confidence."</p>
-            <p class="quote-attribution">Independent Developer, Artist Reference</p>
+            <p class="quote-attribution">Gil Osborne, Independent Developer</p>
         </div>
 
         <p class="body-text">Unlike cluttered reference apps designed for digital artists, Artist Reference embraces simplicity. There are no ads, no accounts to create, and no distractions. The app works entirely offline, making it perfect for plein air painting, studio sessions, or workshops anywhere. All references live in one organized space, ready the moment inspiration strikes.</p>
@@ -353,37 +401,37 @@
                 <div class="download-card">
                     <h3 class="download-title">App Icon</h3>
                     <p class="download-description">High-resolution PNG, 1024x1024px</p>
-                    <a href="#" class="download-button">Download</a>
+                    <a href="https://raw.githubusercontent.com/gilosborne/mytools/main/press/ArtistReference/iconprev-appicon.png" class="download-button" download>Download</a>
                 </div>
                 
                 <div class="download-card">
-                    <h3 class="download-title">Screenshots</h3>
-                    <p class="download-description">iPhone & iPad, Multiple orientations</p>
-                    <a href="#" class="download-button">Download</a>
+                    <h3 class="download-title">iPhone Screenshots</h3>
+                    <p class="download-description">iPhone 16 Pro, Multiple features</p>
+                    <a href="https://github.com/gilosborne/mytools/tree/main/press/ArtistReference" class="download-button" target="_blank">View on GitHub</a>
                 </div>
                 
                 <div class="download-card">
-                    <h3 class="download-title">Feature Images</h3>
-                    <p class="download-description">Value studies, Gridlines, Collections</p>
-                    <a href="#" class="download-button">Download</a>
+                    <h3 class="download-title">iPad Screenshots</h3>
+                    <p class="download-description">iPad Pro, Multiple orientations</p>
+                    <a href="https://github.com/gilosborne/mytools/tree/main/press/ArtistReference" class="download-button" target="_blank">View on GitHub</a>
                 </div>
                 
                 <div class="download-card">
-                    <h3 class="download-title">Demo Video</h3>
-                    <p class="download-description">MP4, 1080p, 30s overview</p>
-                    <a href="#" class="download-button">Download</a>
+                    <h3 class="download-title">Demo Video (iPad)</h3>
+                    <p class="download-description">MP4, App Store preview</p>
+                    <a href="https://raw.githubusercontent.com/gilosborne/mytools/main/press/ArtistReference/AppStoreVideo-iPad.mp4" class="download-button" download>Download</a>
                 </div>
                 
                 <div class="download-card">
-                    <h3 class="download-title">Animated GIFs</h3>
-                    <p class="download-description">Feature demonstrations, optimized for web</p>
-                    <a href="#" class="download-button">Download</a>
+                    <h3 class="download-title">Onboarding Videos</h3>
+                    <p class="download-description">Feature demonstrations</p>
+                    <a href="https://github.com/gilosborne/mytools/tree/main/press/ArtistReference" class="download-button" target="_blank">View on GitHub</a>
                 </div>
                 
                 <div class="download-card">
-                    <h3 class="download-title">Press Kit (ZIP)</h3>
-                    <p class="download-description">Complete package with all assets</p>
-                    <a href="#" class="download-button">Download</a>
+                    <h3 class="download-title">Complete Press Kit</h3>
+                    <p class="download-description">All assets in one package</p>
+                    <a href="https://github.com/gilosborne/mytools/tree/main/press/ArtistReference" class="download-button" target="_blank">View on GitHub</a>
                 </div>
             </div>
 
