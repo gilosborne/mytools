@@ -1,3 +1,10 @@
+
+git add . && git commit -m "Your commit message here" && git push
+
+
+
+
+
 # GitHub Basic Commands
 
 ## Initial Setup (First Time Only)
